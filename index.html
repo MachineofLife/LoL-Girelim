@@ -158,10 +158,23 @@
         .hidden { display: none !important; }
 
         @media (max-width: 768px) {
-            h1, h2 { font-size: 2.2rem; }
-            .options-container { grid-template-columns: 1fr; }
-            .response { flex-direction: column; }
-        }
+    /* === MOBİL CİHAZLAR İÇİN KAYDIRMA DÜZELTMESİ === */
+    body {
+        /* 1. Dikeyde kaydırmaya izin ver */
+        overflow-y: auto; 
+        
+        /* 2. İçeriği dikeyde ortalamak yerine yukarıya hizala */
+        align-items: flex-start;
+        
+        /* 3. Kenar boşlukları ekle ki içerik yapışık durmasın */
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+    }
+    
+    h1, h2 { font-size: 2.2rem; }
+    .options-container { grid-template-columns: 1fr; }
+    .response { flex-direction: column; }
+}
     </style>
 </head>
 <body>
@@ -326,4 +339,5 @@
         });
     </script>
 </body>
+
 </html>
