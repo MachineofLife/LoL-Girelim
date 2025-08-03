@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League of Legends Girek? | Ultimate Hextech Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #010A13;
+            --container-bg: rgba(10, 25, 41, 0.85);
+            --primary-text: #F0E6D2;
+            --gold-accent: #C89B3C;
+            --gold-glow: rgba(200, 155, 60, 0.5);
+            --hextech-blue: #0AC8B9;
+            --hextech-blue-dark: #0397AB;
+            --danger-red: #A31824;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-text);
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        #background-slider {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10;
+        }
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center center; opacity: 0;
+            animation: imageFade 32s linear infinite; 
+            filter: blur(3px) brightness(0.4);
+        }
+        .slide:nth-child(1) { background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Jhin_4.jpg'); animation-delay: 0s; }
+        .slide:nth-child(2) { background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Caitlyn_10.jpg'); animation-delay: 8s; }
+        .slide:nth-child(3) { background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Samira_30.jpg'); animation-delay: 16s; }
+        .slide:nth-child(4) { background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Tristana_10.jpg'); animation-delay: 24s; }
+        @keyframes imageFade {
+            0% { opacity: 0; } 5% { opacity: 1; } 20% { opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; }
+        }
+        .particle {
+            position: absolute; background: var(--hextech-blue); border-radius: 50%; opacity: 0;
+            animation: float-particle 20s infinite;
+            box-shadow: 0 0 10px var(--hextech-blue), 0 0 20px var(--hextech-blue);
+        }
+        @keyframes float-particle {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+        
+        .base-container {
+            width: 100%; max-width: 650px; background: var(--container-bg);
+            padding: 40px; text-align: center;
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(200, 155, 60, 0.3);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+            -webkit-clip-path: polygon(20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px), 0 20px);
+            clip-path: polygon(20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px), 0 20px);
+            animation: enter-scene 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            opacity: 0; transform: translateY(50px);
+        }
+        @keyframes enter-scene { to { opacity: 1; transform: translateY(0); } }
+        
+        h1, h2 {
+            font-family: 'Cinzel', serif; color: var(--gold-accent);
+            text-shadow: 0 0 5px var(--gold-glow), 0 0 15px var(--gold-glow);
+            margin-bottom: 40px;
+        }
+        h1 { font-size: 2.8rem; animation: glow 2.5s ease-in-out infinite; }
+        h2 { font-size: 2.5rem; }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px var(--gold-glow), 0 0 15px var(--gold-glow); }
+            50% { text-shadow: 0 0 10px var(--gold-glow), 0 0 25px var(--gold-glow), 0 0 40px var(--hextech-blue); }
+        }
+        
+        #nameInput {
+            width: 100%; padding: 15px; margin-bottom: 25px; background: rgba(1, 10, 19, 0.7);
+            border: 1px solid var(--hextech-blue-dark); color: var(--primary-text);
+            font-family: 'Poppins', sans-serif; font-size: 1.1rem; text-align: center;
+            transition: all 0.3s ease;
+            -webkit-clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+        }
+        #nameInput:focus { outline: none; border-color: var(--hextech-blue); box-shadow: 0 0 15px rgba(10, 200, 185, 0.4); }
+
+        #gateSubmitBtn {
+            background: transparent; color: var(--gold-accent); border: 2px solid var(--gold-accent); padding: 12px 30px;
+            font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+            -webkit-clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+        }
+        #gateSubmitBtn:hover { background: var(--gold-accent); color: var(--bg-color); box-shadow: 0 0 20px var(--gold-glow); }
+
+        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .option-btn {
+            background: linear-gradient(145deg, rgba(10, 200, 185, 0.1), rgba(10, 200, 185, 0.05));
+            color: var(--primary-text); border: 1px solid var(--hextech-blue-dark);
+            padding: 15px 10px; font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            opacity: 0; transform: translateY(20px);
+            animation: enter-button 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        .option-btn:nth-child(1) { animation-delay: 0.2s; }
+        .option-btn:nth-child(2) { animation-delay: 0.3s; }
+        .option-btn:nth-child(3) { animation-delay: 0.4s; }
+        .option-btn:nth-child(4) { animation-delay: 0.5s; }
+        .option-btn:nth-child(5) { animation-delay: 0.6s; grid-column: 1 / -1; }
+        @keyframes enter-button { to { opacity: 1; transform: translateY(0); } }
+        .option-btn:hover { transform: translateY(-5px); border-color: var(--hextech-blue); box-shadow: 0 0 20px rgba(10, 200, 185, 0.4); color: #fff; }
+        
+        .response { 
+            margin-top: 40px; padding: 20px; background: rgba(1, 10, 19, 0.5); 
+            display: flex; align-items: center; justify-content: center; gap: 20px; 
+            border-left: 4px solid var(--gold-accent); 
+            animation: fadeIn 0.5s forwards; 
+            -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+        }
+        
+        .back-btn { 
+            background: transparent; color: var(--gold-accent); border: 1px solid var(--gold-accent); padding: 8px 20px;
+            font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+            -webkit-clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+        .back-btn:hover { background: var(--gold-accent); color: var(--bg-color); box-shadow: 0 0 15px var(--gold-glow); }
+        
+        .option-btn i { font-size: 1.2rem; opacity: 0.5; transition: all 0.3s ease; }
+        .option-btn:hover i { transform: scale(1.2); opacity: 1; }
+        .option-btn.btn-no { border-color: var(--danger-red); background: linear-gradient(145deg, rgba(163, 24, 36, 0.1), rgba(163, 24, 36, 0.05)); }
+        .option-btn.btn-no:hover { box-shadow: 0 0 20px rgba(200, 32, 47, 0.4); }
+        #championImage { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--gold-accent); object-fit: cover; box-shadow: 0 0 15px var(--gold-glow); }
+        .response-content { display: flex; flex-direction: column; gap: 15px; text-align: center; }
+        .response-text { font-size: 1.2rem; font-weight: 600; color: var(--primary-text); line-height: 1.6; }
+        .summoner-name { display: block; font-size: 1.1rem; color: var(--hextech-blue); font-weight: 600; }
+        .footer { margin-top: 30px; font-size: 0.8rem; color: var(--primary-text); opacity: 0.5; letter-spacing: 1px; }
+        .black-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; animation: fadeIn 1s forwards; }
+        .black-screen-text { color: var(--danger-red); font-family: 'Cinzel', serif; font-size: 2rem; text-align: center; opacity: 0; animation: fadeIn 2s forwards 1s; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        .hidden { display: none !important; }
+
+        @media (max-width: 768px) {
+            h1, h2 { font-size: 2.2rem; }
+            .options-container { grid-template-columns: 1fr; }
+            .response { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div id="background-slider">
+        <div class="slide"></div> <div class="slide"></div> <div class="slide"></div> <div class="slide"></div>
+    </div>
+    
+    <div class="base-container" id="gateContainer">
+        <h2>Sen Kimsin?</h2>
+        <input type="text" id="nameInput" placeholder="İsmin veya Nickname'in" autocomplete="off">
+        <button id="gateSubmitBtn"><i class="fas fa-arrow-right"></i> Devam Et</button>
+    </div>
+
+    <div class="base-container hidden" id="mainContainer">
+        <h1>League of Legends Girek?</h1>
+        <div class="options-container" id="optionsContainer">
+            <button class="option-btn" data-response="1"><i class="fas fa-handshake"></i> Olur ya takılırız</button>
+            <button class="option-btn" data-response="2"><i class="fas fa-fire"></i> Sarar he</button>
+            <button class="option-btn btn-no" data-response="3"><i class="fas fa-thumbs-down"></i> YOK</button>
+            <button class="option-btn" data-response="4"><i class="fas fa-briefcase"></i> İş güç yoğun</button>
+            <button class="option-btn" data-response="5"><i class="fas fa-phone-slash"></i> Aradığınız kişiye şu an...</button>
+        </div>
+        <div class="response hidden" id="responseContainer">
+            <img id="championImage" src="" alt="Champion" class="hidden">
+            <div class="response-content">
+                <p class="response-text" id="responseText"></p>
+                <button class="back-btn hidden" id="backBtn"><i class="fas fa-arrow-left"></i> Geri Dön</button>
+            </div>
+        </div>
+        <div class="footer">
+            <p>mainimorman#TR1</p>
+        </div>
+    </div>
+    
+    <div class="black-screen hidden" id="blackScreen">
+        <div class="black-screen-text">Sana her şey karanlık.. Hak ettin!</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // === EMAILJS AYARLARI (BURAYI KENDİ BİLGİLERİNLE DOLDUR) ===
+            const EMAILJS_SERVICE_ID = 'service_s4xfk1v';
+            const EMAILJS_TEMPLATE_ID = 'template_dlw7lub';
+            const EMAILJS_PUBLIC_KEY = 'O9q9fHEVooWkjrlj-';
+            
+            // === Elementleri Seçme ===
+            const gateContainer = document.getElementById('gateContainer');
+            const nameInput = document.getElementById('nameInput');
+            const gateSubmitBtn = document.getElementById('gateSubmitBtn');
+            const mainContainer = document.getElementById('mainContainer');
+            
+            const optionButtons = document.querySelectorAll('.option-btn');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const responseContainer = document.getElementById('responseContainer');
+            const responseText = document.getElementById('responseText');
+            const championImage = document.getElementById('championImage');
+            const blackScreen = document.getElementById('blackScreen');
+            const backBtn = document.getElementById('backBtn');
+
+            let visitorName = '';
+            let emailHasBeenSent = false; // E-posta gönderimini tek seferle sınırlar
+
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+
+            const particleContainer = document.body;
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div'); particle.classList.add('particle');
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                const size = `${Math.random() * 3 + 1}px`;
+                particle.style.width = size; particle.style.height = size;
+                particleContainer.insertBefore(particle, gateContainer);
+            }
+
+            gateSubmitBtn.addEventListener('click', proceedToMain);
+            nameInput.addEventListener('keyup', function(event) {
+                if (event.key === "Enter") {
+                    proceedToMain();
+                }
+            });
+
+            function proceedToMain() {
+                visitorName = nameInput.value.trim();
+                if (!visitorName) {
+                    alert('Lütfen bir isim veya nickname gir!');
+                    return;
+                }
+                gateContainer.classList.add('hidden');
+                mainContainer.classList.remove('hidden');
+            }
+
+            function sendEmailNotification(responseChoice) {
+                if (emailHasBeenSent) {
+                    console.log('Zaten bir bildirim gönderildi. Tekrar gönderilmiyor.');
+                    return; 
+                }
+
+                const templateParams = {
+                    from_name: visitorName,
+                    response_choice: responseChoice,
+                    to_name: 'mainimorman'
+                };
+
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                    .then(function(response) {
+                       console.log('BİLDİRİM BAŞARIYLA GÖNDERİLDİ!', response.status, response.text);
+                       emailHasBeenSent = true;
+                    }, function(error) {
+                       console.log('BİLDİRİM GÖNDERİLEMEDİ...', error);
+                    });
+            }
+
+            optionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const responseType = this.getAttribute('data-response');
+                    
+                    optionsContainer.classList.add('hidden');
+                    responseContainer.classList.remove('hidden');
+                    championImage.classList.add('hidden');
+                    
+                    switch(responseType) {
+                        case '1':
+                            responseText.innerHTML = `Mükemmel <strong>${visitorName}</strong>! Supportum olur musun?<br>(Aliysen olma AHASJHSAJHAS)<br><span class="summoner-name">Bildirimin mainimorman'a iletildi!</span>`;
+                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/12.22.1/img/champion/Caitlyn.png';
+                            championImage.classList.remove('hidden');
+                            backBtn.classList.remove('hidden');
+                            sendEmailNotification('Olur ya takılırız');
+                            break;
+                        case '2':
+                            responseText.innerHTML = `<strong>${visitorName}</strong>, Samira banlanmazsa sarar, sup oynarsan ekstra sarar.<br><span class="summoner-name">Bildirimin mainimorman'a iletildi!</span>`;
+                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/12.22.1/img/champion/Samira.png';
+                            championImage.classList.remove('hidden');
+                            backBtn.classList.remove('hidden');
+                            sendEmailNotification('Sarar he');
+                            break;
+                        case '3':
+                            responseText.innerHTML = 'Ayıp ettin. Be gentle pls.';
+                            backBtn.classList.add('hidden');
+                            setTimeout(() => { blackScreen.classList.remove('hidden'); }, 3000);
+                            break;
+                        case '4':
+                            responseText.innerHTML = `Anlıyorum <strong>${visitorName}</strong>, kendine iyi bak!`;
+                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/12.22.1/img/champion/Braum.png';
+                            championImage.classList.remove('hidden');
+                            backBtn.classList.remove('hidden');
+                            break;
+                        case '5':
+                            responseText.innerHTML = 'Dııııt dııııt dııııt.';
+                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/12.22.1/img/champion/Blitzcrank.png';
+                            championImage.classList.remove('hidden');
+                            backBtn.classList.remove('hidden');
+                            break;
+                    }
+                });
+            });
+            
+            backBtn.addEventListener('click', function() {
+                responseContainer.classList.add('hidden');
+                optionsContainer.classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
