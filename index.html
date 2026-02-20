@@ -3,483 +3,640 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>League of Legends Girelim? | Machine of Life</title>
+    <title>League of Legends Girelim? | Hextech Davet</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
-            --bg-color: #010A13;
-            --container-bg: rgba(10, 25, 41, 0.85);
-            --primary-text: #F0E6D2;
-            --gold-accent: #C89B3C;
-            --gold-glow: rgba(200, 155, 60, 0.5);
-            --hextech-blue: #0AC8B9;
-            --hextech-blue-dark: #0397AB;
-            --danger-red: #A31824;
-            --shadow-dark: rgba(0, 0, 0, 0.8);
-            --hextech-glow: rgba(10, 200, 185, 0.4);
-            --curse-red-glow: rgba(163, 24, 36, 0.6);
-            --particle-gold: #C89B3C;
-            --particle-red: #A31824;
+            --bg-dark: #010a13;
+            --hex-gold: #c89b3c;
+            --hex-gold-light: #f0e6d2;
+            --hex-gold-dark: #785a28;
+            --hex-blue: #0ac8b9;
+            --hex-blue-dark: #0397ab;
+            --danger-red: #e3242b;
+            --danger-dark: #a31824;
+            
+            --glass-bg: rgba(1, 10, 19, 0.65);
+            --glass-border: rgba(200, 155, 60, 0.3);
+            --glow-gold: rgba(200, 155, 60, 0.5);
+            --glow-blue: rgba(10, 200, 185, 0.5);
+            --glow-red: rgba(227, 36, 43, 0.6);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
         
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            color: var(--primary-text);
-            padding: 20px;
+            color: var(--hex-gold-light);
             overflow: hidden;
             position: relative;
-            transition: filter 0.5s ease;
+            perspective: 1000px;
         }
 
-        body.cursed {
-            animation: tremble 0.5s infinite alternate;
-            filter: brightness(0.7) sepia(0.5);
-        }
-
-        @keyframes tremble {
-            0% { transform: translate(0, 0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(-1px, 1px); }
-            80% { transform: translate(1px, -1px); }
-            100% { transform: translate(0, 0); }
+        /* --- BACKGROUND SLIDER --- */
+        #bg-slider {
+            position: fixed;
+            top: -5%; left: -5%;
+            width: 110%; height: 110%;
+            z-index: -10;
+            background-color: var(--bg-dark);
         }
         
-        #background-slider {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10;
-        }
         .slide {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover; background-position: center center; opacity: 0;
-            animation: imageFade 32s linear infinite; 
-            filter: blur(3px) brightness(0.4);
-            transition: opacity 1.5s ease-in-out, filter 1s ease;
-        }
-        .slide:nth-child(1) { background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Jhin_4.jpg'); animation-delay: 0s; }
-        .slide:nth-child(2) { background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Caitlyn_10.jpg'); animation-delay: 8s; }
-        .slide:nth-child(3) { background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Samira_30.jpg'); animation-delay: 16s; }
-        .slide:nth-child(4) { background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Tristana_10.jpg'); animation-delay: 24s; }
-        @keyframes imageFade {
-            0% { opacity: 0; transform: scale(1.05); } 
-            5% { opacity: 1; transform: scale(1); } 
-            20% { opacity: 1; transform: scale(1); } 
-            25% { opacity: 0; transform: scale(1.05); } 
-            100% { opacity: 0; transform: scale(1.05); }
-        }
-        .particle {
-            position: absolute; border-radius: 50%; opacity: 0;
-            animation: float-particle 25s infinite ease-in-out;
-            box-shadow: 0 0 10px var(--hextech-blue), 0 0 20px var(--hextech-blue), 0 0 30px var(--hextech-glow);
-            filter: blur(1px);
-        }
-        .particle.blue { background: var(--hextech-blue); }
-        .particle.gold { background: var(--particle-gold); box-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow), 0 0 30px var(--gold-glow); }
-        .particle.red { background: var(--particle-red); box-shadow: 0 0 10px var(--curse-red-glow), 0 0 20px var(--curse-red-glow), 0 0 30px var(--curse-red-glow); animation-duration: 10s; }
-        @keyframes float-particle {
-            0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; } 
-            10% { opacity: 0.8; transform: translateY(90vh) scale(0.5) rotate(45deg); } 
-            50% { transform: translateY(50vh) scale(1) rotate(180deg); opacity: 1; }
-            90% { opacity: 0.8; transform: translateY(10vh) scale(0.5) rotate(315deg); } 
-            100% { transform: translateY(-100vh) scale(0) rotate(360deg); opacity: 0; }
-        }
-        .particle爆 { animation: explode-particle 1.5s forwards; }
-        @keyframes explode-particle {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(5) translate(calc(50vw - 50%), calc(50vh - 50%)); opacity: 0; }
-        }
-        
-        .base-container {
-            width: 100%; max-width: 650px; background: var(--container-bg);
-            padding: 40px; text-align: center;
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(200, 155, 60, 0.3);
-            box-shadow: 0 0 40px var(--shadow-dark), 0 0 60px var(--gold-glow), 0 0 80px var(--hextech-glow);
-            -webkit-clip-path: polygon(20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px), 0 20px);
-            clip-path: polygon(20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px), 0 20px);
-            animation: enter-scene 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            opacity: 0; transform: translateY(50px) scale(0.95) rotate(1deg);
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .base-container:hover { transform: scale(1.02) rotate(0deg); box-shadow: 0 0 50px var(--shadow-dark), 0 0 70px var(--gold-glow), 0 0 90px var(--hextech-glow); }
-        @keyframes enter-scene { 
-            0% { opacity: 0; transform: translateY(50px) scale(0.95) rotate(1deg); }
-            100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); } 
-        }
-        
-        h1, h2 {
-            font-family: 'Cinzel', serif; color: var(--gold-accent);
-            text-shadow: 0 0 5px var(--gold-glow), 0 0 15px var(--gold-glow), 0 0 25px var(--hextech-glow), 0 0 35px var(--curse-red-glow);
-            margin-bottom: 40px;
-            animation: pulse-text 2s infinite alternate;
-        }
-        h1 { font-size: 2.8rem; animation: glow 3s ease-in-out infinite; }
-        h2 { font-size: 2.5rem; }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 5px var(--gold-glow), 0 0 15px var(--gold-glow); }
-            50% { text-shadow: 0 0 15px var(--gold-glow), 0 0 30px var(--gold-glow), 0 0 45px var(--hextech-blue), 0 0 60px var(--curse-red-glow); }
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: top center;
+            opacity: 0;
+            /* Parlaklık değeri 0.35'ten 0.75'e yükseltildi */
+            filter: brightness(0.75) contrast(1.2) blur(2px);
+            transition: opacity 2s ease-in-out;
+            transform: scale(1);
         }
 
-        @keyframes pulse-text {
+        .slide.active {
+            opacity: 1;
+            animation: kenburns 15s ease-out forwards;
+        }
+
+        @keyframes kenburns {
             0% { transform: scale(1); }
-            100% { transform: scale(1.02); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Overlay Gradient */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-dark) 100%);
+            z-index: -9;
+        }
+
+        /* --- PARTICLES --- */
+        #particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -8;
+            pointer-events: none;
         }
         
-        #nameInput {
-            width: 100%; padding: 15px; margin-bottom: 25px; background: rgba(1, 10, 19, 0.7);
-            border: 1px solid var(--hextech-blue-dark); color: var(--primary-text);
-            font-family: 'Poppins', sans-serif; font-size: 1.1rem; text-align: center;
-            transition: all 0.4s ease;
-            -webkit-clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-            box-shadow: inset 0 0 10px var(--shadow-dark), 0 0 5px var(--hextech-glow);
-        }
-        #nameInput:focus { outline: none; border-color: var(--hextech-blue); box-shadow: 0 0 20px var(--hextech-glow), inset 0 0 15px var(--hextech-glow), 0 0 30px var(--gold-glow); transform: scale(1.02); }
-
-        #gateSubmitBtn {
-            background: linear-gradient(145deg, var(--gold-accent), #A57C1B); color: var(--bg-color); border: none; padding: 12px 30px;
-            font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.4s ease;
-            -webkit-clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-            box-shadow: 0 0 15px var(--gold-glow), 0 0 25px var(--hextech-glow);
-            animation: button-pulse 2s infinite;
-        }
-        #gateSubmitBtn:hover { transform: scale(1.1) rotate(2deg); box-shadow: 0 0 30px var(--gold-glow), 0 0 45px var(--hextech-glow), 0 0 60px var(--curse-red-glow); }
-        #gateSubmitBtn:active { transform: scale(0.95); }
-
-        @keyframes button-pulse {
-            0% { box-shadow: 0 0 15px var(--gold-glow); }
-            50% { box-shadow: 0 0 25px var(--gold-glow), 0 0 35px var(--hextech-glow); }
-            100% { box-shadow: 0 0 15px var(--gold-glow); }
-        }
-
-        .options-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .option-btn {
-            background: linear-gradient(145deg, rgba(10, 200, 185, 0.15), rgba(10, 200, 185, 0.05));
-            color: var(--primary-text); border: 1px solid var(--hextech-blue-dark);
-            padding: 15px 10px; font-size: 1rem; font-weight: 600; cursor: pointer;
-            transition: all 0.4s ease;
-            -webkit-clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            opacity: 0; transform: translateY(20px) scale(0.95) rotate(-1deg);
-            animation: enter-button 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            box-shadow: 0 0 10px var(--shadow-dark), 0 0 15px var(--hextech-glow);
-        }
-        .option-btn:nth-child(1) { animation-delay: 0.2s; }
-        .option-btn:nth-child(2) { animation-delay: 0.3s; }
-        .option-btn:nth-child(3) { animation-delay: 0.4s; }
-        .option-btn:nth-child(4) { animation-delay: 0.5s; }
-        .option-btn:nth-child(5) { animation-delay: 0.6s; grid-column: span 2 / span 2; }
-        @keyframes enter-button { 
-            0% { opacity: 0; transform: translateY(20px) scale(0.95) rotate(-1deg); }
-            100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); } 
-        }
-        .option-btn:hover { transform: translateY(-5px) scale(1.05) rotate(1deg); border-color: var(--hextech-blue); box-shadow: 0 0 25px var(--hextech-glow), 0 0 35px var(--gold-glow), 0 0 45px var(--curse-red-glow); color: #fff; }
-        .option-btn:active { transform: scale(0.9); box-shadow: 0 0 10px var(--hextech-glow); }
-        
-        .response { 
-            margin-top: 40px; padding: 20px; background: rgba(1, 10, 19, 0.5); 
-            display: flex; align-items: center; justify-content: center; gap: 20px; 
-            border-left: 4px solid var(--gold-accent); 
-            animation: fadeInScale 0.8s forwards; 
-            -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
-            box-shadow: 0 0 20px var(--shadow-dark), 0 0 30px var(--gold-glow);
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--hex-blue);
+            box-shadow: 0 0 10px var(--hex-blue), 0 0 20px var(--hex-blue);
+            animation: floatUp linear infinite;
             opacity: 0;
         }
-        @keyframes fadeInScale {
-            0% { opacity: 0; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* --- CONTAINERS --- */
+        .screen {
+            position: absolute;
+            width: 100%;
+            max-width: 700px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 10;
+        }
+
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            border-radius: 4px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 
+                        inset 0 0 0 1px rgba(255,255,255,0.05),
+                        0 0 30px rgba(200, 155, 60, 0.1);
+            position: relative;
+            width: 100%;
+        }
+
+        /* Hextech Corners */
+        .glass-panel::before, .glass-panel::after {
+            content: ''; position: absolute; width: 20px; height: 20px;
+            border: 2px solid var(--hex-gold); transition: all 0.3s ease;
+        }
+        .glass-panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .glass-panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+        .glass-panel:hover::before, .glass-panel:hover::after { width: 40px; height: 40px; }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--hex-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px var(--glow-gold), 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        h1 { font-size: 2.8rem; line-height: 1.2; }
+        h2 { font-size: 2.2rem; }
+
+        /* --- INPUT --- */
+        .input-group {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 40px auto;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-bottom: 2px solid var(--hex-gold-dark);
+            color: var(--hex-gold-light);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            padding: 15px 20px;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-bottom-color: var(--hex-blue);
+            background: rgba(10, 200, 185, 0.05);
+            box-shadow: 0 10px 20px -10px var(--glow-blue);
+        }
+
+        input[type="text"]::placeholder { color: rgba(240, 230, 210, 0.4); }
+
+        /* --- BUTTONS --- */
+        .btn {
+            background: linear-gradient(135deg, var(--hex-gold-dark), var(--hex-gold));
+            color: var(--bg-dark);
+            border: none;
+            padding: 15px 40px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--glow-gold);
+        }
+
+        .btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-25deg); transition: all 0.5s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px var(--glow-gold), 0 0 10px white;
+            color: black;
+        }
+
+        .btn:hover::before { left: 150%; }
+        .btn:active { transform: translateY(1px); }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            background: rgba(3, 151, 171, 0.1);
+            border: 1px solid var(--hex-blue-dark);
+            color: var(--hex-gold-light);
+            padding: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.3s ease;
+        }
+
+        .option-btn i { font-size: 1.2rem; color: var(--hex-blue); transition: all 0.3s; }
+        
+        .option-btn:hover {
+            background: rgba(10, 200, 185, 0.2);
+            border-color: var(--hex-blue);
+            box-shadow: 0 0 20px var(--glow-blue);
+            transform: translateY(-3px);
+        }
+
+        .option-btn:hover i { transform: scale(1.2) rotate(10deg); color: white; }
+
+        .option-btn.btn-no {
+            border-color: var(--danger-dark);
+            background: rgba(163, 24, 36, 0.1);
+        }
+        .option-btn.btn-no i { color: var(--danger-red); }
+        .option-btn.btn-no:hover {
+            background: rgba(227, 36, 43, 0.2);
+            border-color: var(--danger-red);
+            box-shadow: 0 0 20px var(--glow-red);
+        }
+        .option-btn.btn-no:hover i { color: white; transform: scale(1.2) rotate(-10deg); }
+
+        .option-btn.full-width { grid-column: 1 / -1; }
+
+        /* --- RESPONSE SCREEN --- */
+        .response-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .champion-avatar {
+            position: relative;
+            width: 140px; height: 140px;
+        }
+
+        .champion-avatar img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--hex-gold);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .avatar-ring {
+            position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border-radius: 50%;
+            border: 2px dashed var(--hex-blue);
+            animation: spin 10s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .response-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            text-shadow: 0 2px 4px rgba(0,0,0,1);
+        }
+
+        .response-text strong { color: var(--hex-gold); font-size: 1.3rem; }
+        .status-msg { display: block; margin-top: 15px; font-size: 0.9rem; color: var(--hex-blue); font-style: italic; }
+
+        /* --- CURSE MODE --- */
+        body.cursed {
+            animation: glitch-shake 0.3s infinite;
         }
         
-        .back-btn { 
-            background: linear-gradient(145deg, var(--gold-accent), #A57C1B); color: var(--bg-color); border: none; padding: 8px 20px;
-            font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.4s ease;
-            -webkit-clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
-            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
-            box-shadow: 0 0 10px var(--gold-glow), 0 0 15px var(--hextech-glow);
-            animation: button-pulse 2s infinite;
-        }
-        .back-btn:hover { transform: scale(1.1) rotate(-2deg); box-shadow: 0 0 20px var(--gold-glow), 0 0 30px var(--hextech-glow), 0 0 40px var(--curse-red-glow); }
-        .back-btn:active { transform: scale(0.95); }
-        
-        .option-btn i { font-size: 1.2rem; opacity: 0.7; transition: all 0.4s ease; }
-        .option-btn:hover i { transform: scale(1.3) rotate(15deg); opacity: 1; }
-        .option-btn.btn-no { border-color: var(--danger-red); background: linear-gradient(145deg, rgba(163, 24, 36, 0.15), rgba(163, 24, 36, 0.05)); }
-        .option-btn.btn-no:hover { box-shadow: 0 0 25px rgba(200, 32, 47, 0.4), 0 0 35px var(--danger-red), 0 0 45px var(--curse-red-glow); transform: translateY(-5px) scale(1.05) rotate(-1deg); }
-        #championImage { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--gold-accent); object-fit: cover; box-shadow: 0 0 15px var(--gold-glow), 0 0 25px var(--hextech-glow), 0 0 35px var(--curse-red-glow); transition: all 0.4s ease; opacity: 0; animation: image-reveal 1s forwards 0.5s; }
-        #championImage:hover { transform: scale(1.15) rotate(10deg); box-shadow: 0 0 25px var(--gold-glow), 0 0 40px var(--hextech-glow); }
-        @keyframes image-reveal {
-            0% { opacity: 0; transform: scale(0.5) rotate(-180deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-        .response-content { display: flex; flex-direction: column; gap: 15px; text-align: center; }
-        .response-text { font-size: 1.2rem; font-weight: 600; color: var(--primary-text); line-height: 1.6; text-shadow: 0 0 5px var(--shadow-dark), 0 0 10px var(--hextech-glow); animation: text-glow 2s infinite alternate; }
-        @keyframes text-glow {
-            0% { text-shadow: 0 0 5px var(--shadow-dark); }
-            100% { text-shadow: 0 0 10px var(--shadow-dark), 0 0 15px var(--hextech-glow); }
-        }
-        .summoner-name { display: block; font-size: 1.1rem; color: var(--hextech-blue); font-weight: 600; animation: blink 1s infinite; }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .footer { margin-top: 30px; font-size: 0.8rem; color: var(--primary-text); opacity: 0.6; letter-spacing: 1px; text-align: center; animation: footer-float 5s infinite ease-in-out; }
-        @keyframes footer-float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .black-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #000 0%, #200 50%, #000 100%); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; animation: curse-fade-in 2s forwards; transition: background 1s ease; }
-        .black-screen-text { color: var(--danger-red); font-family: 'Cinzel', serif; font-size: 2.5rem; text-align: center; opacity: 0; animation: curse-text 3s infinite alternate 1s; text-shadow: 0 0 15px var(--danger-red), 0 0 25px var(--curse-red-glow); transform: scale(1); }
-        @keyframes curse-fade-in {
-            0% { opacity: 0; filter: blur(10px); }
-            50% { opacity: 0.7; filter: blur(5px); }
-            100% { opacity: 1; filter: blur(0); }
-        }
-        @keyframes curse-text {
-            0% { opacity: 0; transform: scale(0.5) rotate(-5deg); text-shadow: 0 0 10px var(--danger-red); }
-            50% { opacity: 1; transform: scale(1.2) rotate(5deg); text-shadow: 0 0 30px var(--danger-red), 0 0 50px var(--curse-red-glow); }
-            100% { opacity: 0.8; transform: scale(1) rotate(0deg); text-shadow: 0 0 20px var(--danger-red); }
-        }
-        .hidden { display: none !important; }
+        body.cursed #bg-slider { filter: hue-rotate(150deg) saturate(3) brightness(0.4); }
+        body.cursed .overlay { background: radial-gradient(circle at center, transparent 0%, #300 100%); }
 
-        @media (max-width: 768px) {
-            body {
-                overflow-y: auto; 
-                align-items: flex-start;
-                padding-top: 5vh;
-                padding-bottom: 5vh;
-            }
-            .base-container { padding: 30px; max-width: 90%; }
-            h1, h2 { font-size: 2.2rem; margin-bottom: 30px; }
-            .options-container { grid-template-columns: 1fr; gap: 10px; }
-            .option-btn:nth-child(5) { grid-column: 1 / -1; }
-            .response { flex-direction: column; gap: 15px; padding: 15px; }
-            #championImage { width: 100px; height: 100px; }
-            .response-text { font-size: 1.1rem; }
-            .black-screen-text { font-size: 2rem; }
+        @keyframes glitch-shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        @media (max-width: 480px) {
-            h1, h2 { font-size: 1.8rem; }
-            #nameInput { font-size: 1rem; padding: 12px; }
-            #gateSubmitBtn { font-size: 1rem; padding: 10px 25px; }
-            .option-btn { font-size: 0.9rem; padding: 12px 8px; }
-            .back-btn { font-size: 0.9rem; padding: 6px 15px; }
-            .footer { font-size: 0.7rem; }
-            .black-screen-text { font-size: 1.5rem; }
+        #black-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: opacity 1s ease;
         }
 
-        @media (min-width: 1024px) {
-            .base-container { max-width: 700px; padding: 50px; }
-            h1 { font-size: 3rem; }
-            h2 { font-size: 2.7rem; }
-            .option-btn { font-size: 1.1rem; }
+        #black-screen.active { opacity: 1; visibility: visible; }
+
+        .curse-text {
+            font-family: 'Cinzel', serif;
+            color: var(--danger-red);
+            font-size: 3rem;
+            text-align: center;
+            text-shadow: 0 0 20px var(--danger-red), 0 0 40px var(--danger-dark);
+            animation: pulse-curse 2s infinite;
+        }
+
+        @keyframes pulse-curse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; text-shadow: 0 0 40px var(--danger-red), 0 0 80px red; }
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute; bottom: -40px; left: 0; width: 100%;
+            text-align: center; font-size: 0.8rem; color: rgba(240, 230, 210, 0.3);
+            letter-spacing: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            .glass-panel { padding: 30px 20px; }
+            .options-grid { grid-template-columns: 1fr; }
+            .curse-text { font-size: 2rem; padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <div id="background-slider">
-        <div class="slide"></div> <div class="slide"></div> <div class="slide"></div> <div class="slide"></div>
+
+    <!-- Background Slider -->
+    <div id="bg-slider">
+        <!-- High quality splash arts -->
+        <div class="slide active" style="background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Jhin_4.jpg');"></div>
+        <div class="slide" style="background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Caitlyn_10.jpg');"></div>
+        <div class="slide" style="background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Samira_30.jpg');"></div>
+        <div class="slide" style="background-image: url('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Viego_0.jpg');"></div>
     </div>
-    
-    <div class="base-container" id="gateContainer">
-        <h2>Sen Kimsin?</h2>
-        <input type="text" id="nameInput" placeholder="İsmin veya Nickname'in" autocomplete="off">
-        <button id="gateSubmitBtn"><i class="fas fa-arrow-right"></i> Devam Et</button>
+    <div class="overlay"></div>
+    <div id="particles"></div>
+
+    <!-- SCREEN 1: GATE -->
+    <div class="screen active" id="screen-gate">
+        <div class="glass-panel">
+            <h2>Sen Kimsin?</h2>
+            <div class="input-group">
+                <input type="text" id="nameInput" placeholder="Sihirdar Adın..." autocomplete="off">
+            </div>
+            <button class="btn" id="btn-enter"><i class="fas fa-khanda"></i> Vadiye İn</button>
+        </div>
     </div>
 
-    <div class="base-container hidden" id="mainContainer">
-        <h1>League of Legends Girek?</h1>
-        <div class="options-container" id="optionsContainer">
-            <button class="option-btn" data-response="1"><i class="fas fa-handshake"></i> Olur ya takılırız</button>
-            <button class="option-btn" data-response="2"><i class="fas fa-fire"></i> Sarar he</button>
-            <button class="option-btn btn-no" data-response="3"><i class="fas fa-thumbs-down"></i> YOK</button>
-            <button class="option-btn" data-response="4"><i class="fas fa-briefcase"></i> İş güç yoğun</button>
-            <button class="option-btn" data-response="5"><i class="fas fa-phone-slash"></i> Aradığınız kişiye şu an...</button>
-        </div>
-        <div class="response hidden" id="responseContainer">
-            <img id="championImage" src="" alt="Champion" class="hidden">
-            <div class="response-content">
-                <p class="response-text" id="responseText"></p>
-                <button class="back-btn hidden" id="backBtn"><i class="fas fa-arrow-left"></i> Geri Dön</button>
+    <!-- SCREEN 2: MAIN OPTIONS -->
+    <div class="screen" id="screen-main">
+        <div class="glass-panel">
+            <h1>League of Legends Girek?</h1>
+            <div class="options-grid">
+                <button class="option-btn" data-id="1"><i class="fas fa-handshake"></i> Olur ya takılırız</button>
+                <button class="option-btn" data-id="2"><i class="fas fa-fire"></i> Sarar he</button>
+                <button class="option-btn" data-id="4"><i class="fas fa-briefcase"></i> İş güç yoğun</button>
+                <button class="option-btn btn-no" data-id="3"><i class="fas fa-skull"></i> YOK</button>
+                <button class="option-btn full-width" data-id="5"><i class="fas fa-phone-slash"></i> Aradığınız kişiye şu an...</button>
             </div>
-        </div>
-        <div class="footer">
-            <p>mainimorman#TR1</p>
+            <div class="footer">MAINIMORMAN#TR1</div>
         </div>
     </div>
-    
-    <div class="black-screen hidden" id="blackScreen">
-        <div class="black-screen-text">Sana her şey karanlık.. Hak ettin!</div>
+
+    <!-- SCREEN 3: RESPONSE -->
+    <div class="screen" id="screen-response">
+        <div class="glass-panel">
+            <div class="response-content">
+                <div class="champion-avatar">
+                    <div class="avatar-ring"></div>
+                    <img id="champ-img" src="" alt="Champion">
+                </div>
+                <div class="response-text" id="response-text">
+                    <!-- Text injected via JS -->
+                </div>
+                <button class="btn" id="btn-back" style="margin-top: 10px; font-size: 0.9rem; padding: 10px 25px;">
+                    <i class="fas fa-arrow-left"></i> Geri Dön
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CURSE SCREEN -->
+    <div id="black-screen">
+        <div class="curse-text">SANA HER ŞEY KARANLIK...<br>HAK ETTİN!</div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // === EMAILJS AYARLARI (BURAYI KENDİ BİLGİLERİNLE DOLDUR) ===
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- EMAILJS CONFIGURATION ---
+            // Kendi EmailJS bilgilerini buraya ekleyebilirsin
             const EMAILJS_SERVICE_ID = 'service_s4xfk1v';
             const EMAILJS_TEMPLATE_ID = 'template_dlw7lub';
             const EMAILJS_PUBLIC_KEY = 'O9q9fHEVooWkjrlj-';
             
-            // === Elementleri Seçme ===
-            const gateContainer = document.getElementById('gateContainer');
-            const nameInput = document.getElementById('nameInput');
-            const gateSubmitBtn = document.getElementById('gateSubmitBtn');
-            const mainContainer = document.getElementById('mainContainer');
-            
-            const optionButtons = document.querySelectorAll('.option-btn');
-            const optionsContainer = document.getElementById('optionsContainer');
-            const responseContainer = document.getElementById('responseContainer');
-            const responseText = document.getElementById('responseText');
-            const championImage = document.getElementById('championImage');
-            const blackScreen = document.getElementById('blackScreen');
-            const backBtn = document.getElementById('backBtn');
-            const body = document.body;
+            // Sadece test amaçlı, hata vermemesi için init'i try-catch içine alıyoruz
+            try {
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+            } catch(e) { console.warn("EmailJS başlatılamadı, API key eksik olabilir."); }
 
             let visitorName = '';
-            let emailHasBeenSent = false; // E-posta gönderimini tek seferle sınırlar
+            let emailSent = false;
 
-            emailjs.init(EMAILJS_PUBLIC_KEY);
+            // --- DOM ELEMENTS ---
+            const screens = {
+                gate: document.getElementById('screen-gate'),
+                main: document.getElementById('screen-main'),
+                response: document.getElementById('screen-response')
+            };
+            
+            const nameInput = document.getElementById('nameInput');
+            const btnEnter = document.getElementById('btn-enter');
+            const optionBtns = document.querySelectorAll('.option-btn');
+            const btnBack = document.getElementById('btn-back');
+            
+            const champImg = document.getElementById('champ-img');
+            const responseText = document.getElementById('response-text');
+            const blackScreen = document.getElementById('black-screen');
+            const body = document.body;
 
-            const particleContainer = document.body;
-            function createParticle(className = 'blue') {
-                const particle = document.createElement('div'); 
-                particle.classList.add('particle', className);
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                const size = `${Math.random() * 4 + 1}px`;
-                particle.style.width = size; particle.style.height = size;
-                particleContainer.insertBefore(particle, gateContainer);
-                return particle;
+            // --- BACKGROUND SLIDER LOGIC ---
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 8000); // Her 8 saniyede bir değişir
+
+            // --- PARTICLE SYSTEM ---
+            const particleContainer = document.getElementById('particles');
+            const colors = ['var(--hex-blue)', 'var(--hex-gold)', 'var(--hex-blue-dark)'];
+            
+            function createParticle() {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                
+                // Rastgele özellikler
+                const size = Math.random() * 4 + 2;
+                p.style.width = `${size}px`;
+                p.style.height = `${size}px`;
+                p.style.left = `${Math.random() * 100}vw`;
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                p.style.boxShadow = `0 0 ${size*2}px ${p.style.background}`;
+                p.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                
+                particleContainer.appendChild(p);
+                
+                // Animasyon bitince sil
+                setTimeout(() => { p.remove(); }, 20000);
+            }
+            
+            // Başlangıçta parçacık üret ve sürekli devam et
+            for(let i=0; i<15; i++) setTimeout(createParticle, Math.random() * 5000);
+            setInterval(createParticle, 1500);
+
+            // --- SCREEN TRANSITION LOGIC ---
+            function switchScreen(hideScreen, showScreen) {
+                hideScreen.classList.remove('active');
+                setTimeout(() => {
+                    showScreen.classList.add('active');
+                }, 500); // CSS transition süresiyle uyumlu
             }
 
-            for (let i = 0; i < 20; i++) {
-                createParticle('blue');
-            }
-            for (let i = 0; i < 10; i++) {
-                createParticle('gold');
-            }
-
-            gateSubmitBtn.addEventListener('click', proceedToMain);
-            nameInput.addEventListener('keyup', function(event) {
-                if (event.key === "Enter") {
-                    proceedToMain();
-                }
-            });
-
-            function proceedToMain() {
-                visitorName = nameInput.value.trim();
-                if (!visitorName) {
-                    alert('Lütfen bir isim veya nickname gir!');
+            // --- EVENT LISTENERS ---
+            
+            // Gate -> Main
+            const enterMain = () => {
+                const val = nameInput.value.trim();
+                if (!val) {
+                    nameInput.style.borderBottomColor = 'var(--danger-red)';
+                    nameInput.style.animation = 'glitch-shake 0.3s';
+                    setTimeout(() => nameInput.style.animation = '', 300);
                     return;
                 }
-                gateContainer.classList.add('hidden');
-                mainContainer.classList.remove('hidden');
-            }
+                visitorName = val;
+                switchScreen(screens.gate, screens.main);
+            };
 
-            function sendEmailNotification(responseChoice) {
-                if (emailHasBeenSent) {
-                    console.log('Zaten bir bildirim gönderildi. Tekrar gönderilmiyor.');
-                    return; 
+            btnEnter.addEventListener('click', enterMain);
+            nameInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') enterMain(); });
+
+            // Main -> Response
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    handleResponse(id);
+                });
+            });
+
+            // Response -> Main
+            btnBack.addEventListener('click', () => {
+                switchScreen(screens.response, screens.main);
+            });
+
+            // --- RESPONSE LOGIC ---
+            function handleResponse(id) {
+                // YOK (Lanet) seçeneği
+                if (id === '3') {
+                    triggerCurse();
+                    return;
                 }
 
-                const templateParams = {
+                switchScreen(screens.main, screens.response);
+                
+                let msg = '';
+                let imgUrl = '';
+                let actionText = '';
+
+                switch(id) {
+                    case '1':
+                        msg = `Mükemmel <strong>${visitorName}</strong>! Supportum olur musun?<br><span style="font-size:0.8rem; opacity:0.7;">(Aliysen olma AHASJHSAJHAS)</span>`;
+                        imgUrl = 'https://ddragon.leagueoflegends.com/cdn/14.4.1/img/champion/Caitlyn.png';
+                        actionText = 'Olur ya takılırız';
+                        break;
+                    case '2':
+                        msg = `<strong>${visitorName}</strong>, Samira banlanmazsa fena sarar. Sup oynarsan ekstra sarar.`;
+                        imgUrl = 'https://ddragon.leagueoflegends.com/cdn/14.4.1/img/champion/Samira.png';
+                        actionText = 'Sarar he';
+                        break;
+                    case '4':
+                        msg = `Anlıyorum <strong>${visitorName}</strong>, vadi seni bekler. Kendine iyi bak!`;
+                        imgUrl = 'https://ddragon.leagueoflegends.com/cdn/14.4.1/img/champion/Braum.png';
+                        break;
+                    case '5':
+                        msg = `Dııııt... Dııııt... Dııııt...<br>Sinyal koptu.`;
+                        imgUrl = 'https://ddragon.leagueoflegends.com/cdn/14.4.1/img/champion/Blitzcrank.png';
+                        break;
+                }
+
+                champImg.src = imgUrl;
+                
+                if (id === '1' || id === '2') {
+                    sendNotification(actionText);
+                    msg += `<span class="status-msg"><i class="fas fa-check-circle"></i> Sinyal mainimorman'a iletildi!</span>`;
+                }
+
+                responseText.innerHTML = msg;
+            }
+
+            // --- CURSE EFFECT ---
+            function triggerCurse() {
+                screens.main.classList.remove('active');
+                body.classList.add('cursed');
+                
+                // Parçacıkları kırmızı yap ve hızlandır
+                document.querySelectorAll('.particle').forEach(p => {
+                    p.style.background = 'var(--danger-red)';
+                    p.style.boxShadow = '0 0 20px red';
+                    p.style.animationDuration = '2s';
+                });
+
+                // 2 saniye sonra ekranı karart
+                setTimeout(() => {
+                    blackScreen.classList.add('active');
+                    body.classList.remove('cursed'); // Titremeyi durdur
+                }, 2500);
+            }
+
+            // --- EMAILJS SENDER ---
+            function sendNotification(choice) {
+                if (emailSent || EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID') return;
+
+                const params = {
                     from_name: visitorName,
-                    response_choice: responseChoice,
+                    response_choice: choice,
                     to_name: 'mainimorman'
                 };
 
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-                    .then(function(response) {
-                       console.log('BİLDİRİM BAŞARIYLA GÖNDERİLDİ!', response.status, response.text);
-                       emailHasBeenSent = true;
-                    }, function(error) {
-                       console.log('BİLDİRİM GÖNDERİLEMEDİ...', error);
-                    });
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+                    .then(() => { emailSent = true; console.log("İletildi."); })
+                    .catch(err => console.error("İletilemedi:", err));
             }
-
-            function triggerCurseEffects() {
-                body.classList.add('cursed');
-                for (let i = 0; i < 50; i++) {
-                    const redParticle = createParticle('red');
-                    redParticle.style.left = `${Math.random() * 100}%`;
-                    redParticle.style.top = `${Math.random() * 100}%`;
-                    setTimeout(() => {
-                        redParticle.classList.add('explode');
-                        setTimeout(() => redParticle.remove(), 1500);
-                    }, Math.random() * 2000);
-                }
-                setTimeout(() => {
-                    body.classList.remove('cursed');
-                }, 3000);
-            }
-
-            optionButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const responseType = this.getAttribute('data-response');
-                    
-                    optionsContainer.classList.add('hidden');
-                    responseContainer.classList.remove('hidden');
-                    championImage.classList.add('hidden');
-                    backBtn.classList.add('hidden'); // Her seferinde sıfırla
-                    
-                    switch(responseType) {
-                        case '1':
-                            responseText.innerHTML = `Mükemmel <strong>${visitorName}</strong>! Supportum olur musun?<br>(Aliysen olma AHASJHSAJHAS)<br><span class="summoner-name">Bildirimin mainimorman'a iletildi!</span>`;
-                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/champion/Caitlyn.png';
-                            championImage.classList.remove('hidden');
-                            backBtn.classList.remove('hidden');
-                            sendEmailNotification('Olur ya takılırız');
-                            break;
-                        case '2':
-                            responseText.innerHTML = `<strong>${visitorName}</strong>, Samira banlanmazsa sarar, sup oynarsan ekstra sarar.<br><span class="summoner-name">Bildirimin mainimorman'a iletildi!</span>`;
-                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/champion/Samira.png';
-                            championImage.classList.remove('hidden');
-                            backBtn.classList.remove('hidden');
-                            sendEmailNotification('Sarar he');
-                            break;
-                        case '3':
-                            responseText.innerHTML = 'Ayıp ettin. Be gentle pls.';
-                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/champion/Nocturne.png';
-                            championImage.classList.remove('hidden');
-                            triggerCurseEffects();
-                            setTimeout(() => { blackScreen.classList.remove('hidden'); }, 3000);
-                            break;
-                        case '4':
-                            responseText.innerHTML = `Anlıyorum <strong>${visitorName}</strong>, kendine iyi bak!`;
-                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/champion/Braum.png';
-                            championImage.classList.remove('hidden');
-                            backBtn.classList.remove('hidden');
-                            break;
-                        case '5':
-                            responseText.innerHTML = 'Dııııt dııııt dııııt.';
-                            championImage.src = 'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/champion/Blitzcrank.png';
-                            championImage.classList.remove('hidden');
-                            backBtn.classList.remove('hidden');
-                            break;
-                    }
-                });
-            });
-            
-            backBtn.addEventListener('click', function() {
-                responseContainer.classList.add('hidden');
-                optionsContainer.classList.remove('hidden');
-            });
         });
     </script>
 </body>
